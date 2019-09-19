@@ -48,7 +48,7 @@ spec:
               weight: 1
       containers:
         - name: demo-gateway
-          image: freemanliu/demo-gateway:v1.0.0
+          image: freemanliu/demo-gateway:v1.1.0
           imagePullPolicy: Always
           lifecycle:
             preStop:
