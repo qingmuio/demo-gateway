@@ -8,14 +8,13 @@ spring:
       fail-fast: true
 eureka:
   client:
-    registry-fetch-interval-seconds: 60
-    register-with-eureka: false
+    registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone: ${EUREKA_SERVER:http://172.224.3.12:8761/eureka/,http://172.224.7.120:8761/eureka/,http://172.224.4.180:8761/eureka/}
   instance:
     prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5000
-    lease-expiration-duration-in-seconds: 100000
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
     instance-id: ${spring.application.name}:${server.port}@${random.long(1000000,9999999)}
 
 
