@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="LOG_FILE_PATH" source="logging.logPath" defaultValue="${user.home}"/>
+    <logger name="org.springframework.web.servlet.PageNotFound" level="ERROR"/>
+    <logger name="org.springframework.cloud.config.client.ConfigServicePropertySourceLocator" level="ERROR"/>
+    <logger name="com.my" level="INFO"/>
+
+    <springProfile name="default">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]  [%thread] %logger{50}  - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="test,prod">
+        <appender name="file.async.error" class="ch.qos.logback.classic.AsyncAppender">
+
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>256</queueSize>
+            <includeCallerData>true</includeCallerData>
+
+            <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <prudent>true</prudent>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${LOG_FILE_PATH}/%d{yyyy-MM-dd}.${hostname}.error.log</fileNamePattern>
+                    <maxHistory>2</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <charset>UTF-8</charset>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]  [%thread] %logger{50}  - %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                    <level>ERROR</level>
+                    <onMatch>ACCEPT</onMatch>
+                    <onMismatch>DENY</onMismatch>
+                </filter>
+            </appender>
+        </appender>
+
+        <appender name="file.async.info" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>256</queueSize>
+            <includeCallerData>true</includeCallerData>
+
+            <appender class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <prudent>true</prudent>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${LOG_FILE_PATH}/%d{yyyy-MM-dd}.${hostname}.info.log</fileNamePattern>
+                    <maxHistory>2</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <charset>UTF-8</charset>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]  [%thread] %logger{50}  - %msg%n</pattern>
+                </encoder>
+                <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                    <level>ERROR</level>
+                    <onMatch>DENY</onMatch>
+                    <onMismatch>ACCEPT</onMismatch>
+                </filter>
+            </appender>
+        </appender>
+
+        <appender name="console" class="ch.qos.logback.classic.AsyncAppender">
+            <appender class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <charset>UTF-8</charset>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]  [%thread] %logger{50}  - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="console"/>
+            <appender-ref ref="file.async.error"/>
+            <appender-ref ref="file.async.info"/>
+        </root>
+    </springProfile>
+
+</configuration>

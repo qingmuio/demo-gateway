@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    config:
+      label: master
+      discovery:
+        enabled: true
+        serviceId: config-service
+      fail-fast: true
+eureka:
+  client:
+    registry-fetch-interval-seconds: 60
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://172.224.3.12:8761/eureka/,http://172.224.7.120:8761/eureka/,http://172.224.4.180:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5000
+    lease-expiration-duration-in-seconds: 100000
+    instance-id: ${spring.application.name}:${server.port}@${random.long(1000000,9999999)}
+
+
+
+
