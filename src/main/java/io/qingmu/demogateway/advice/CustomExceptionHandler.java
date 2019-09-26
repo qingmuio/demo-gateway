@@ -48,7 +48,7 @@ public class CustomExceptionHandler implements ErrorWebExceptionHandler {
             log.error(ex.getMessage(), ex);
             body = "服务器繁忙-请稍后重试。";
         }
-        log.error("[全局异常处理]异常请求路径:{},记录异常信息:{}", request.getPath(), ex.getMessage());
+        log.error("{},{},{}", request.getPath(), ex.getMessage(),request.getQueryParams());
         final ServerHttpResponse response = exchange.getResponse();
         if (response.isCommitted()) {
             return Mono.error(ex);

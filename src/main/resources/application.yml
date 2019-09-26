@@ -6,7 +6,7 @@ spring:
     base-url: ${ZIPKIN:http://10.96.0.13:9411/}
   sleuth:
     sampler:
-      probability: ${SAMPLER_PROBABILITY:1.0}
+      probability: ${SAMPLER_PROBABILITY:0.1}
   cloud:
     gateway:
       discovery:
@@ -26,23 +26,29 @@ spring:
           args:
             retries: 3
             series:
-            - SERVER_ERROR
-            - CLIENT_ERROR
+              - SERVER_ERROR
+              - CLIENT_ERROR
             statuses:
-            - INTERNAL_SERVER_ERROR
+              - INTERNAL_SERVER_ERROR
             methods:
-            - GET
-            - POST
+              - GET
+              - POST
             exceptions:
-            - java.io.IOException
-            - java.util.concurrent.TimeoutException
+              - java.io.IOException
+              - java.util.concurrent.TimeoutException
   application:
     name: demo-gateway
 
 
+
 ribbon:
+  httpclient:
+    enabled: false
   okhttp:
     enabled: true
+  http:
+    client:
+      enabled: false
   eager-load:
     enabled: true
 
@@ -50,7 +56,13 @@ ribbon:
 logging:
   logPath: /var/log/${spring.application.name}
   level:
+    org: error
     com.netflix.discovery.shared.resolver.aws: ERROR
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: error
 
 management:
   endpoints:

@@ -1,22 +1,14 @@
+nacos:
+  address: 172.224.4.189:8848,172.224.5.90:8848,172.224.7.140:8848
 spring:
   cloud:
-    config:
-      label: master
+    nacos:
       discovery:
-        enabled: true
-        serviceId: config-service
-      fail-fast: true
-eureka:
-  client:
-    registry-fetch-interval-seconds: 5
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER:http://172.224.3.12:8761/eureka/,http://172.224.7.120:8761/eureka/,http://172.224.4.180:8761/eureka/}
-  instance:
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 10
-    instance-id: ${spring.application.name}:${server.port}@${random.long(1000000,9999999)}
-
-
-
+        server-addr: ${NACOS_ADDRESS:${nacos.address}}
+      config:
+        server-addr: ${NACOS_ADDRESS:${nacos.address}}
+        file-extension: yaml
+        ext-config:
+          - data-id: gray.yaml
+            refresh: true
 
